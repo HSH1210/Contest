@@ -8,11 +8,15 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 gray = (204, 204, 204)
 
+def object(location, sizeX, sizeY):
+    object = pygame.image.load(location)
+    object = pygame.transform.scale(object, (sizeX, sizeY))
+    return object
+
 ch_size = 50
-ch_speed = 0.1
-maxspeed = 2.5
-char = pygame.image.load('character.png')
-char = pygame.transform.scale(char, (ch_size, ch_size))
+ch_speed = 0.4
+maxspeed = 7.5
+char = object('character.png', ch_size, ch_size)
 chx, chy, chxs, chys = 0, 0, 0, 0
 
 
@@ -40,13 +44,11 @@ def chMove():
     elif chys > 0:
         chys -= ch_speed/2
 
-    chx = round(chx, 2)
-    chy = round(chy, 2)
-    chxs = round(chxs, 2)
-    chys = round(chys, 2)
+    round(chx, 2)
+    round(chy, 2)
 
-    chx += chxs
-    chy += chys
+    chx += round(chxs, 2)
+    chy += round(chys, 2)
 
 
 def initGame():
