@@ -3,7 +3,7 @@ import sys
 import random
 
 width = 1600
-height = 900    
+height = 900
 white = (255, 255, 255)
 black = (0, 0, 0)
 gray = (204, 204, 204)
@@ -11,67 +11,67 @@ gray = (204, 204, 204)
 ch_size = 50
 ch_speed = 0.1
 maxspeed = 2.5
-ch = pygame.image.load('character.png')
-ch = pygame.transform.scale(ch, (ch_size, ch_size))
-chx, chy, chsx, chsy = 0, 0, 0, 0
+char = pygame.image.load('character.png')
+char = pygame.transform.scale(char, (ch_size, ch_size))
+chx, chy, chxs, chys = 0, 0, 0, 0
 
 
 def chMove():
-    global chx, chy, chsx, chsy
+    global chx, chy, chxs, chys
     keyInput = pygame.key.get_pressed()
     if keyInput[pygame.K_a]:
-        chsx -= ch_speed
+        chxs -= ch_speed
     if keyInput[pygame.K_d]:
-        chsx += ch_speed
+        chxs += ch_speed
     if keyInput[pygame.K_w]:
-        chsy -= ch_speed
+        chys -= ch_speed
     if keyInput[pygame.K_s]:
-        chsy += ch_speed
+        chys += ch_speed
 
-    chsx = max(-maxspeed, min(maxspeed, chsx))
-    chsy = max(-maxspeed, min(maxspeed, chsy))
+    chxs = max(-maxspeed, min(maxspeed, chxs))
+    chys = max(-maxspeed, min(maxspeed, chys))
 
-    if chsx < 0:
-        chsx += ch_speed/2
-    elif chsx > 0:
-        chsx -= ch_speed/2
-    if chsy < 0:
-        chsy += ch_speed/2
-    elif chsy > 0:
-        chsy -= ch_speed/2
+    if chxs < 0:
+        chxs += ch_speed/2
+    elif chxs > 0:
+        chxs -= ch_speed/2
+    if chys < 0:
+        chys += ch_speed/2
+    elif chys > 0:
+        chys -= ch_speed/2
 
     chx = round(chx, 2)
     chy = round(chy, 2)
-    chsx = round(chsx, 2)
-    chsy = round(chsy, 2)
+    chxs = round(chxs, 2)
+    chys = round(chys, 2)
 
-    chx += chsx
-    chy += chsy
-    print(chx,chy,chsx,chsy)
+    chx += chxs
+    chy += chys
+    print(chx,chy,chxs,chys)
 
 
 def initGame():
-    global screen, clock, ch
+    global screen, clock, char
     pygame.init()
     screen = pygame.display.set_mode((width, height))
-    pygame.display.set_caption('Game') # 창 제목 설정
+    pygame.display.set_caption('Contest Game') # 창 제목 설정
     clock = pygame.time.Clock() # 시간 설정
 
 
 def runGame():
-    global screen, clock, ch, fps
-    fps = clock.tick(60)
+    global screen, clock, char
+    clock.tick(60)
     onGame = True
     while onGame:
         for event in pygame.event.get(): # 발생한 입력 event 목록의 event마다 검사
             if event.type == pygame.QUIT: # event의 type이 QUIT에 해당할 경우
                 onGame = False
                 pygame.quit() # pygame을 종료한다
-                sys.exit() # 창을 닫는다
+                yss.exit() # 창을 닫는다
 
         chMove() # 캐릭터 움직임
-        screen.fill(gray) # screen를 하얀색으로 채운다
-        screen.blit(ch, pygame.Rect(int(chx), int(chy), ch_size, ch_size)) # 캐릭터 blit   
+        screen.fill(gray) # screen를 회색으로 채운다
+        screen.blit(char, pygame.Rect(int(chx), int(chy), ch_size, ch_size)) # 캐릭터 blit   
         pygame.display.update() # 화면을 업데이트한다
 
 initGame()
