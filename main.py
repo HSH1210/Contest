@@ -66,7 +66,7 @@ def runGame():
             if event.type == pygame.QUIT: # event의 type이 QUIT에 해당할 경우
                 onGame = False
                 pygame.quit() # pygame을 종료한다
-                yss.exit() # 창을 닫는다
+                sys.exit() # 창을 닫는다
 
         chMove() # 캐릭터 움직임
         screen.fill(gray) # screen를 회색으로 채운다
