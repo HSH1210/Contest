@@ -59,7 +59,6 @@ def initGame():
 
 def runGame():
     global screen, clock, char
-    clock.tick(60)
     onGame = True
     while onGame:
         for event in pygame.event.get(): # 발생한 입력 event 목록의 event마다 검사
@@ -72,6 +71,7 @@ def runGame():
         screen.fill(gray) # screen를 회색으로 채운다
         screen.blit(char, pygame.Rect(int(chx), int(chy), ch_size, ch_size)) # 캐릭터 blit   
         pygame.display.update() # 화면을 업데이트한다
+        clock.tick(60)
 
 initGame()
 runGame()
