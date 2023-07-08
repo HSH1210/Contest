@@ -64,7 +64,8 @@ def runGame():
     onGame = True
     while onGame:
         for event in pygame.event.get(): # 발생한 입력 event 목록의 event마다 검사
-            if event.type == QUIT: # event의 type이 QUIT에 해당할 경우
+            if event.type == pygame.QUIT: # event의 type이 QUIT에 해당할 경우
+                onGame = False
                 pygame.quit() # pygame을 종료한다
                 sys.exit() # 창을 닫는다
 
