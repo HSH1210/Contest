@@ -11,7 +11,7 @@ gray = (204, 204, 204)
 ch_size = 50
 ch_speed = 0.1
 maxspeed = 2.5
-ch = pygame.image.load('character.jpg')
+ch = pygame.image.load('character.png')
 ch = pygame.transform.scale(ch, (ch_size, ch_size))
 chx, chy, chsx, chsy = 0, 0, 0, 0
 
