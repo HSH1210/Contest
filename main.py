@@ -47,7 +47,6 @@ def chMove():
 
     chx += chxs
     chy += chys
-    print(chx,chy,chxs,chys)
 
 
 def initGame():
