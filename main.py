@@ -14,8 +14,8 @@ def object(location, sizeX, sizeY):
     return object
 
 ch_size = 50
-ch_speed = 0.4
-maxspeed = 7.5
+ch_speed = 1
+maxspeed = 10
 char = object('character.png', ch_size, ch_size)
 chx, chy, chxs, chys = 0, 0, 0, 0
 
@@ -56,7 +56,7 @@ def initGame():
     pygame.init()
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption('Contest Game') # 창 제목 설정
-    clock = pygame.time.Clock() # 시간 설정
+    clock = pygame.time.Clock()
 
 
 def runGame():
@@ -67,12 +67,12 @@ def runGame():
             if event.type == pygame.QUIT: # event의 type이 QUIT에 해당할 경우
                 onGame = False
                 pygame.quit() # pygame을 종료한다
-                sys.exit() # 창을 닫는다
+                sys.exit()
 
         chMove() # 캐릭터 움직임
-        screen.fill(gray) # screen를 회색으로 채운다
+        screen.fill(gray)
         screen.blit(char, pygame.Rect(int(chx), int(chy), ch_size, ch_size)) # 캐릭터 blit   
-        pygame.display.update() # 화면을 업데이트한다
+        pygame.display.update()
         clock.tick(60)
 
 initGame()
