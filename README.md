@@ -1,16 +1,35 @@
-# Contest
 
 
-Required Libraries and Modules
+# Required Libraries
 
-pygame  : pip install pygame
 
-renpy   : https://www.renpy.org/latest.html
+pygame
 
-sys     : pip install os-sys
+```shell
+pip install pygame
+```
 
-random  : pip install random2
+renpy
 
-math    : pip install python-math
+https://www.renpy.org/latest.html
+
+sys
+
+```shell
+pip install os-sys
+```
+
+random
+
+
+```shell
+pip install random2
+```
+
+math
+
+```shell
+pip install python-math
+```
 
 
