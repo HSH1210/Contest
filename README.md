@@ -1,27 +1,11 @@
 # Contest
 
 
-
-
 Required Libraries and Modules
-
-
-
-
-
-Please install individually
-
-renpy   : https://www.renpy.org/latest.html
-
-
-
-
-
-Please install with pip
 
 pygame  : pip install pygame
 
-
+renpy   : https://www.renpy.org/latest.html
 
 sys     : pip install os-sys
 
