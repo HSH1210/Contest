@@ -2,78 +2,88 @@ import pygame
 import sys
 import random
 
-width = 1600
-height = 900
+# Define colors
 white = (255, 255, 255)
 black = (0, 0, 0)
 gray = (204, 204, 204)
 
-def object(location, sizeX, sizeY):
-    object = pygame.image.load(location)
-    object = pygame.transform.scale(object, (sizeX, sizeY))
-    return object
+class Player:
+    def __init__(self, location, x, y, sizeX, sizeY, speed, maxspeed):
+        self.image = pygame.image.load(location)
+        self.image = pygame.transform.scale(self.image, (sizeX, sizeY))
+        self.flipped = pygame.transform.flip(self.image, True, False)
+        self.rect = self.image.get_rect()
+        self.speed = speed
+        self.maxspeed = maxspeed
+        self.rect.x = x
+        self.rect.y = y
+        self.xs = 0
+        self.ys = 0
 
-ch_size = 50
-ch_speed = 1
-maxspeed = 10
-char = object('character.png', ch_size, ch_size)
-chx, chy, chxs, chys = 0, 0, 0, 0
+    def move(self, keyInput):
+        if keyInput[pygame.K_a]:
+            self.xs -= self.speed
+        if keyInput[pygame.K_d]:
+            self.xs += self.speed
+        if keyInput[pygame.K_w]:
+            self.ys -= self.speed
+        if keyInput[pygame.K_s]:
+            self.ys += self.speed
 
+        self.xs = max(-self.maxspeed, min(self.maxspeed, self.xs))
+        self.ys = max(-self.maxspeed, min(self.maxspeed, self.ys))
 
-def chMove():
-    global chx, chy, chxs, chys
-    keyInput = pygame.key.get_pressed()
-    if keyInput[pygame.K_a]:
-        chxs -= ch_speed
-    if keyInput[pygame.K_d]:
-        chxs += ch_speed
-    if keyInput[pygame.K_w]:
-        chys -= ch_speed
-    if keyInput[pygame.K_s]:
-        chys += ch_speed
+        if self.xs < 0:
+            self.xs += self.speed / 2
+        elif self.xs > 0:
+            self.xs -= self.speed / 2
+        if self.ys < 0:
+            self.ys += self.speed / 2
+        elif self.ys > 0:
+            self.ys -= self.speed / 2
 
-    chxs = max(-maxspeed, min(maxspeed, chxs))
-    chys = max(-maxspeed, min(maxspeed, chys))
+        self.rect.x += round(self.xs, 2)
+        self.rect.y += round(self.ys, 2)
 
-    if chxs < 0:
-        chxs += ch_speed/2
-    elif chxs > 0:
-        chxs -= ch_speed/2
-    if chys < 0:
-        chys += ch_speed/2
-    elif chys > 0:
-        chys -= ch_speed/2
+    def draw(self, surface):
+        cursorx = pygame.mouse.get_pos()[0]
+        if cursorx >= self.rect.x + self.rect.width/2:
+            surface.blit(self.image, (int(self.rect.x), int(self.rect.y)))
+        else:
+            surface.blit(self.flipped, (int(self.rect.x), int(self.rect.y)))
+        
 
-    round(chx, 2)
-    round(chy, 2)
-
-    chx += round(chxs, 2)
-    chy += round(chys, 2)
-
-
-def initGame():
-    global screen, clock, char
+def RunGame():
     pygame.init()
+    width = 1600
+    height = 900
     screen = pygame.display.set_mode((width, height))
-    pygame.display.set_caption('Contest Game') # 창 제목 설정
+    pygame.display.set_caption('Contest Game')
     clock = pygame.time.Clock()
 
+    ch_initx = 0
+    ch_inity = 0
+    ch_size = 50
+    ch_speed = 1
+    maxspeed = 10
+    char = Player('character2.png', ch_initx, ch_inity, ch_size, ch_size, ch_speed, maxspeed)
 
-def runGame():
-    global screen, clock, char
     onGame = True
     while onGame:
-        for event in pygame.event.get(): # 발생한 입력 event 목록의 event마다 검사
-            if event.type == pygame.QUIT: # event의 type이 QUIT에 해당할 경우
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 onGame = False
-                pygame.quit() # pygame을 종료한다
+                pygame.quit()
                 sys.exit()
 
-        chMove() # 캐릭터 움직임
+        keyInput = pygame.key.get_pressed()
+        char.move(keyInput)
+
         screen.fill(gray)
-        screen.blit(char, pygame.Rect(int(chx), int(chy), ch_size, ch_size)) # 캐릭터 blit   
+        char.draw(screen)
         pygame.display.update()
         clock.tick(60)
 
-initGame()
-runGame()
+if __name__ == '__main__':
+    RunGame()
+
