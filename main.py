@@ -1,56 +1,60 @@
 import pygame
 import sys
 import random
+import math
+
+
+fps = 60
 
 # Define colors
 white = (255, 255, 255)
 black = (0, 0, 0)
 gray = (204, 204, 204)
 
+ch_size = (50, 50)
+Player_image = pygame.image.load('character2.png')
+Player_image = pygame.transform.scale(Player_image, ch_size)
+Player_flipped = pygame.transform.flip(Player_image, True, False)
+
 class Player:
-    def __init__(self, location, x, y, sizeX, sizeY, speed, maxspeed):
-        self.image = pygame.image.load(location)
-        self.image = pygame.transform.scale(self.image, (sizeX, sizeY))
-        self.flipped = pygame.transform.flip(self.image, True, False)
-        self.rect = self.image.get_rect()
+    def __init__(self, image, image_flipped, x, y, speed, maxspeed):
+        self.image = image
+        self.flipped = image_flipped
+        self.rect = self.image.get_rect(center=(x,y))
         self.speed = speed
         self.maxspeed = maxspeed
-        self.rect.x = x
-        self.rect.y = y
-        self.xs = 0
-        self.ys = 0
+        self.velocity = pygame.math.Vector2(0, 0)
 
     def move(self, keyInput):
         if keyInput[pygame.K_a]:
-            self.xs -= self.speed
+            self.velocity.x -= self.speed
         if keyInput[pygame.K_d]:
-            self.xs += self.speed
+            self.velocity.x += self.speed
         if keyInput[pygame.K_w]:
-            self.ys -= self.speed
+            self.velocity.y -= self.speed
         if keyInput[pygame.K_s]:
-            self.ys += self.speed
+            self.velocity.y += self.speed
 
-        self.xs = max(-self.maxspeed, min(self.maxspeed, self.xs))
-        self.ys = max(-self.maxspeed, min(self.maxspeed, self.ys))
+        self.velocity.x = max(-self.maxspeed, min(self.maxspeed, self.velocity.x))
+        self.velocity.y = max(-self.maxspeed, min(self.maxspeed, self.velocity.y))
 
-        if self.xs < 0:
-            self.xs += self.speed / 2
-        elif self.xs > 0:
-            self.xs -= self.speed / 2
-        if self.ys < 0:
-            self.ys += self.speed / 2
-        elif self.ys > 0:
-            self.ys -= self.speed / 2
-
-        self.rect.x += round(self.xs, 2)
-        self.rect.y += round(self.ys, 2)
+        if self.velocity.x < 0:
+            self.velocity.x += self.speed / 2
+        elif self.velocity.x > 0:
+            self.velocity.x -= self.speed / 2
+        if self.velocity.y < 0:
+            self.velocity.y += self.speed / 2
+        elif self.velocity.y > 0:
+            self.velocity.y -= self.speed / 2
+    
+        self.rect.move_ip(self.velocity.x, self.velocity.y)
 
     def draw(self, surface):
         cursorx = pygame.mouse.get_pos()[0]
-        if cursorx >= self.rect.x + self.rect.width/2:
-            surface.blit(self.image, (int(self.rect.x), int(self.rect.y)))
+        if cursorx >= self.rect.centerx:
+            surface.blit(self.image, self.rect)
         else:
-            surface.blit(self.flipped, (int(self.rect.x), int(self.rect.y)))
+            surface.blit(self.flipped, self.rect)
         
 
 def RunGame():
@@ -63,10 +67,9 @@ def RunGame():
 
     ch_initx = 0
     ch_inity = 0
-    ch_size = 50
     ch_speed = 1
     maxspeed = 10
-    char = Player('character2.png', ch_initx, ch_inity, ch_size, ch_size, ch_speed, maxspeed)
+    char = Player(Player_image, Player_flipped, ch_initx, ch_inity, ch_speed, maxspeed)
 
     onGame = True
     while onGame:
@@ -82,7 +85,7 @@ def RunGame():
         screen.fill(gray)
         char.draw(screen)
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(fps)
 
 if __name__ == '__main__':
     RunGame()
