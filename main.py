@@ -6,26 +6,41 @@ import math
 
 fps = 60
 
-# Define colors
 white = (255, 255, 255)
 black = (0, 0, 0)
 gray = (204, 204, 204)
 
-ch_size = (50, 50)
-Player_image = pygame.image.load('character2.png')
-Player_image = pygame.transform.scale(Player_image, ch_size)
-Player_flipped = pygame.transform.flip(Player_image, True, False)
+width = 1600
+height = 900
+
+
+def load_image(location, size, axis):
+    image = pygame.image.load(location)
+    sizeX = image.get_height()
+    sizeY = image.get_width()
+    image = pygame.transform.scale(image, (sizeX*size, sizeY*size))
+    if axis == 'x':
+        flipped = pygame.transform.flip(image, False, True)
+    elif axis == 'y':
+        flipped = pygame.transform.flip(image, True, False)
+
+    return image, flipped
+
+
+Player_image, Player_flipped = load_image('character2.png', 5, 'y')
+Weapon_image, Weapon_flipped = load_image('Weapon1.png', 5, 'x')
+
 
 class Player:
-    def __init__(self, image, image_flipped, x, y, speed, maxspeed):
+    def __init__(self, image, flipped, pos, speed, maxspeed):
         self.image = image
-        self.flipped = image_flipped
-        self.rect = self.image.get_rect(center=(x,y))
+        self.flipped = flipped
+        self.rect = self.image.get_rect(center=pos)
         self.speed = speed
         self.maxspeed = maxspeed
         self.velocity = pygame.math.Vector2(0, 0)
 
-    def move(self, keyInput):
+    def update(self, keyInput):
         if keyInput[pygame.K_a]:
             self.velocity.x -= self.speed
         if keyInput[pygame.K_d]:
@@ -55,21 +70,45 @@ class Player:
             surface.blit(self.image, self.rect)
         else:
             surface.blit(self.flipped, self.rect)
+
+
+class Weapon:
+    def __init__(self, image, flipped):
+        self.image0 = image
+        self.flipped0 = flipped
+    
+    def update(self, player):
+        self.rect0 = self.image0.get_rect(center=player.rect.center)
+
+        cursor_x, cursor_y = pygame.mouse.get_pos()
+        dx = cursor_x - self.rect0.centerx
+        dy = cursor_y - self.rect0.centery
+        self.angle = math.degrees(math.atan2(dx, dy))-90
+
+        self.image1 = pygame.transform.rotate(self.image0, int(self.angle))
+        self.flipped1 = pygame.transform.rotate(self.flipped0, int(self.angle))
+        self.rect1 = self.image1.get_rect(center=self.rect0.center)
+
+    def draw(self, surface):
+        cursorx = pygame.mouse.get_pos()[0]
+        if cursorx >= self.rect1.centerx:
+            surface.blit(self.image1, self.rect1)
+        else:
+            surface.blit(self.flipped1, self.rect1)
         
 
 def RunGame():
+    global width, height
     pygame.init()
-    width = 1600
-    height = 900
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption('Contest Game')
     clock = pygame.time.Clock()
 
-    ch_initx = 0
-    ch_inity = 0
+    initpos = (width/2, height/2)
     ch_speed = 1
     maxspeed = 10
-    char = Player(Player_image, Player_flipped, ch_initx, ch_inity, ch_speed, maxspeed)
+    char = Player(Player_image, Player_flipped, initpos, ch_speed, maxspeed)
+    weapon = Weapon(Weapon_image, Weapon_flipped) 
 
     onGame = True
     while onGame:
@@ -80,10 +119,13 @@ def RunGame():
                 sys.exit()
 
         keyInput = pygame.key.get_pressed()
-        char.move(keyInput)
+        char.update(keyInput)
+        weapon.update(char)
 
         screen.fill(gray)
         char.draw(screen)
+        weapon.draw(screen)
+
         pygame.display.update()
         clock.tick(fps)
 
