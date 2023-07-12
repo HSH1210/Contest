@@ -31,8 +31,9 @@ Player_image, Player_flipped = load_image('character2.png', 5, 'y')
 Weapon_image, Weapon_flipped = load_image('Weapon1.png', 5, 'x')
 
 
-class Player:
+class Player(pygame.sprite.Sprite):
     def __init__(self, image, flipped, pos, speed, maxspeed):
+        super(Player, self).__init__()
         self.image = image
         self.flipped = flipped
         self.rect = self.image.get_rect(center=pos)
@@ -74,11 +75,13 @@ class Player:
 
 class Weapon:
     def __init__(self, image, flipped):
+        super(Weapon, self).__init__()
         self.image0 = image
         self.flipped0 = flipped
+        self.rect = self.image0.get_rect()
     
     def update(self, player):
-        self.rect0 = self.image0.get_rect(center=player.rect.center)
+        self.rect.center = player.rect.center
 
         cursor_x, cursor_y = pygame.mouse.get_pos()
         dx = cursor_x - self.rect0.centerx
@@ -87,7 +90,6 @@ class Weapon:
 
         self.image1 = pygame.transform.rotate(self.image0, int(self.angle))
         self.flipped1 = pygame.transform.rotate(self.flipped0, int(self.angle))
-        self.rect1 = self.image1.get_rect(center=self.rect0.center)
 
     def draw(self, surface):
         cursorx = pygame.mouse.get_pos()[0]
