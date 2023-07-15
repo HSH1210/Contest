@@ -30,9 +30,9 @@ pip install python-math
 
 # 2. Font Info
 
- Ramche(램체)
+이 게임에는 (주)이키나게임즈가 제공한 'Ramche(램체)'가 사용되었습니다.
 
- https://www.ikinagames.com/ramche
+ Ramche(램체): https://www.ikinagames.com/ramche
 
 ​
 
