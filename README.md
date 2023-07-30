@@ -14,16 +14,16 @@ sys
 pip install os-sys
 ```
 
-random
-
-```shell
-pip install random2
-```
-
 math
 
 ```shell
 pip install python-math
+```
+
+random
+
+```shell
+pip install random2
 ```
 
 ​
